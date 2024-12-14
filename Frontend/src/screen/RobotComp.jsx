@@ -14,11 +14,6 @@ const RobotComp = ({ robots }) => {
                         <div
                             style={{
                                 ...styles.tableRow,
-                                // backgroundColor: isOffline
-                                //     ? '#235e71'
-                                //     : isLowBattery
-                                //         ? '#235e71'
-                                //         : '#235e71',
                             }}
                             key={index}
                         >

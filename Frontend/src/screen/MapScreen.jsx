@@ -11,7 +11,6 @@ const inActiveIcon = new Icon({
     iconUrl: "./src/assets/inactive.svg",
     iconSize: [15, 15]
 });
-
 const MapScreen = ({ data }) => {
     return (
         <MapContainer center={[12.931758, -7.110705]} zoom={1}>

@@ -62,12 +62,11 @@ function App() {
 
       <div className='dashboard' style={styles.dashboard}>
         <RobotTable robotArr={robots} />
-
         <div className="map-container" style={styles.mapContainer}>
           <MapScreen data={robots} />
           
         </div>
-      </div>
+        </div>
     </>
   );
 }
