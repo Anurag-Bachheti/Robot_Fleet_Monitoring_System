@@ -1,3 +1,7 @@
+import lowBatteryIcon from '../assets/batteryAlert.svg';
+import redDotIcon from '../assets/redDot.svg';
+import greenDotIcon from '../assets/greenDot.svg';
+
 const RobotComp = ({ robots }) => {
     return (
         <>
@@ -10,26 +14,43 @@ const RobotComp = ({ robots }) => {
                         <div
                             style={{
                                 ...styles.tableRow,
-                                backgroundColor: isOffline
-                                    ? '#575782' // Light blue for offline
-                                    : isLowBattery
-                                        ? '#eb8f34' // Light red for low battery
-                                        : 'white', // Default background
+                                // backgroundColor: isOffline
+                                //     ? '#235e71'
+                                //     : isLowBattery
+                                //         ? '#235e71'
+                                //         : '#235e71',
                             }}
                             key={index}
                         >
                             <div style={styles.tableCell}>{robot.id}</div>
-                            <div style={styles.tableCell}>
-                                {robot.status ? 'Online' : 'Offline'}
+                            <div style={{display: 'flex', alignItems: 'center', ...styles.tableCell}}>
+                                {robot.status ? (
+                                    <>
+                                        <img src={greenDotIcon} style={{ width: '70px', height: '70px', marginRight:'5px' }} alt="Green dot" />
+                                        Online 
+                                    </>
+                                ) : (
+                                    <>
+                                        <img src={redDotIcon} style={{ width: '70px', height: '70px', }} alt="Red dot" />
+                                        Offline
+                                    </>
+                                )}
                             </div>
-                            <div style={styles.tableCell}>{robot.battery}%</div>
+                            <div style={styles.batteryContainer}>
+                                {robot.battery}%
+                                {robot.battery < 20 && (
+                                    <div style={styles.icon}>
+                                        <img src={lowBatteryIcon} style={{ width: '20px', height: '20px' }} />
+                                    </div>
+                                )}
+                            </div>
                             <div style={styles.tableCell}>{robot.cpuUsage}%</div>
                             <div style={styles.tableCell}>{robot.ramConsumption} MB</div>
                             <div style={styles.tableCell}>{robot.lastUpdated}</div>
                             <div style={styles.tableCell}>
                                 Latitude: {robot.location.latitude}, Longitude: {robot.location.longitude}
                             </div>
-                        </div>
+                        </div >
                     );
                 })
             ) : (
@@ -43,10 +64,10 @@ const styles = {
     container: {
         padding: '20px',
         textAlign: 'center',
-        height: '100vh', // Ensures the page takes up full viewport height
+        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-start', // Aligns content to the top
+        justifyContent: 'flex-start',
     },
     errorMessage: {
         color: 'red',
@@ -54,35 +75,50 @@ const styles = {
     },
     tableContainer: {
         width: '100%',
-        maxHeight: '80vh',  // Ensures the table occupies a significant portion of the viewport
+        maxHeight: '80vh',
         border: '1px solid #ddd',
-        overflowY: 'auto',  // Enables vertical scrolling for the table body
+        overflowY: 'auto',
     },
     tableHeader: {
         color: 'black',
         display: 'flex',
         position: 'sticky',
-        top: 0, // Keeps the header at the top of the table
+        top: 0,
         backgroundColor: '#f4f4f4',
         fontWeight: 'bold',
-        zIndex: 1, // Ensure the header stays above the body
+        zIndex: 1,
     },
     tableCell: {
+        display: 'flex',
+        alignItems: 'center',
         flex: '1',
         padding: '10px',
         textAlign: 'center',
         borderBottom: '1px solid #ddd',
+        marginLeft: '20px',
+    },
+    batteryContainer: {
+        display: 'flex',
+        flex: '1',
+        alignItems:'center',
+        // gap:'5px',
+        padding: '10px',
+        textAlign: 'center',
+        borderBottom: '1px solid #ddd',
+        marginLeft: '40px',
     },
     tableBody: {
-        backgroundColor: 'white',
-        color: 'black',
+        color: 'white',
         display: 'block',
-        maxHeight: '70vh',  // Adjust height to show at least 7 rows
-        overflowY: 'auto', // Enables scrolling in body
+        maxHeight: '70vh',
+        overflowY: 'auto',
     },
     tableRow: {
         display: 'flex',
         borderBottom: '1px solid #ddd',
+    },
+    icon: {
+        marginLeft: '5px',
     },
 };
 
