@@ -55,7 +55,7 @@ function App() {
   return (
     <>
       <div style={styles.container}>
-        <h1>Robot Monitoring Dashboard</h1>
+        <h1>Robot Fleet Monitoring Dashboard</h1>
 
         {error && <div style={styles.errorMessage}>Error: {error}</div>}
         <RobotTable robotArr={robots} />
