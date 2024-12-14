@@ -4,7 +4,7 @@ import RobotTable from './screen/robotTable';
 import "./app.css";
 
 function App() {
-
+  const [filter, setFilter] = useState('All');
   const [robots, setRobots] = useState([]);
   const [error, setError] = useState(null);
 
@@ -17,6 +17,14 @@ function App() {
     getRobotData();
     setTimeout(reCallData, 5000);
   }
+
+  const filteredRobots = robots.filter((robot) => {
+    if (filter === 'All') return true;
+    if (filter === 'BatteryLow') {
+      if (robot.battery < 20) return true;
+    }
+    return filter === 'Online' ? robot.status : !robot.status;
+  });
 
   // Fetch robot data
   async function getRobotData() {
@@ -57,16 +65,27 @@ function App() {
       <div style={styles.container}>
         <h1>Robot Monitoring Dashboard</h1>
 
+        <select
+          style={styles.dropdown}
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option value="All">All</option>
+          <option value="Online">Online</option>
+          <option value="Offline">Offline</option>
+          <option value="BatteryLow">Low Battery</option>
+        </select>
+
         {error && <div style={styles.errorMessage}>Error: {error}</div>}
       </div>
 
       <div className='dashboard' style={styles.dashboard}>
-        <RobotTable robotArr={robots} />
+        <RobotTable robotArr={filteredRobots} />
         <div className="map-container" style={styles.mapContainer}>
-          <MapScreen data={robots} />
-          
+          <MapScreen data={filteredRobots} />
+
         </div>
-        </div>
+      </div>
     </>
   );
 }
@@ -88,7 +107,7 @@ const styles = {
   },
   mapContainer: {
     flex: 2,
-    width:'100%',
+    width: '100%',
     minWidth: '700px',
     height: '100%',
     backgroundColor: '#f0f0f0',
@@ -98,6 +117,10 @@ const styles = {
     color: 'red',
     marginBottom: '20px',
   },
-
+  dropdown: {
+    marginBottom: '20px',
+    padding: '10px',
+    fontSize: '16px',
+  },
 };
 export default App;
