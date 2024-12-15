@@ -4,7 +4,8 @@ import RobotTable from './screen/robotTable';
 import "./app.css";
 
 function App() {
-
+  const [selectedRobot, setSelectedRobot] = useState(null);
+  const [filter, setFilter] = useState('All');
   const [robots, setRobots] = useState([]);
   const [error, setError] = useState(null);
 
@@ -17,6 +18,14 @@ function App() {
     getRobotData();
     setTimeout(reCallData, 5000);
   }
+
+  const filteredRobots = robots.filter((robot) => {
+    if (filter === 'All') return true;
+    if (filter === 'BatteryLow') {
+      if (robot.battery < 20) return true;
+    }
+    return filter === 'Online' ? robot.status : !robot.status;
+  });
 
   // Fetch robot data
   async function getRobotData() {
@@ -37,12 +46,12 @@ function App() {
         }
 
         return {
-          id: element["Robot ID"],        // Correct the field name to "Robot ID"
-          status: element["Online/Offline"], // Correct the field name to "Online/Offline"
-          battery: element["Battery Percentage"], // Correct the field name to "Battery Percentage"
-          cpuUsage: element["CPU Usage"],  // Correct the field name to "CPU Usage"
-          ramConsumption: element["RAM Consumption"], // Correct the field name to "RAM Consumption"
-          lastUpdated: element["Last Updated"], // Correct the field name to "Last Updated"
+          id: element["Robot ID"],
+          status: element["Online/Offline"],
+          battery: element["Battery Percentage"],
+          cpuUsage: element["CPU Usage"],
+          ramConsumption: element["RAM Consumption"],
+          lastUpdated: element["Last Updated"],
           location: { latitude, longitude }
         }
       });
@@ -51,35 +60,76 @@ function App() {
       setError(e.message);
     }
   }
+  const handleIconClick = (robot) => {
+    setSelectedRobot(robot);
+  };
 
   return (
     <>
       <div style={styles.container}>
-        <h1>Robot Fleet Monitoring Dashboard</h1>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h1 style={{ marginRight: '16px' }}>Robot Monitoring Dashboard</h1>
 
-        {error && <div style={styles.errorMessage}>Error: {error}</div>}
-        <RobotTable robotArr={robots} />
+          <select
+            style={styles.dropdown}
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="All">All</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+            <option value="BatteryLow">Low Battery</option>
+          </select>
+
+          {error && <div style={styles.errorMessage}>Error: {error}</div>}
+        </div>
       </div>
 
-      <div className="map-container">
-        <MapScreen data={robots} />
+      <div className='dashboard' style={styles.dashboard}>
+        <RobotTable robotArr={filteredRobots} selectedRobot={selectedRobot} />
+        <div className="map-container" style={styles.mapContainer}>
+          <MapScreen data={filteredRobots} onIconClick={handleIconClick} />
+
+        </div>
       </div>
     </>
   );
 }
 
 const styles = {
-  container: {
-    padding: '20px',
-    textAlign: 'center',
-    height: '100vh', // Ensures the page takes up full viewport height
+  dashboard: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start', // Aligns content to the top
+    gap: '20px',
+    width: '100%',
+    height: '80%',
+    alignItems: 'flex-start',
+  },
+  robotTable: {
+    height: '100%',
+    flex: '1',
+    minWidth: '300px',
+    maxWidth: '500px',
+    overflowY: 'auto',
+  },
+  mapContainer: {
+    flex: 2,
+    width: '100%',
+    minWidth: '700px',
+    height: '100%',
+    backgroundColor: '#f0f0f0',
+    marginbottom: '20px',
   },
   errorMessage: {
     color: 'red',
     marginBottom: '20px',
-  }
+  },
+  dropdown: {
+    lineHeight: 'normal',
+    padding: '6px 12px',
+    marginBottom: '20px',
+    fontSize: '16px',
+    fontSize: 'inherit',
+    marginBottom: '0'
+  },
 };
 export default App;

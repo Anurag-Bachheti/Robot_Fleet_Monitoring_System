@@ -1,5 +1,5 @@
 #root {
-  max-width: 1280px;
+  max-width: 90%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -41,20 +41,9 @@
   color: #888;
 }
 
-
-
-
-/* Set the map container size */
-.map-container {
-  width: 90%;  /* Make the map container full width */
-  height: 60vh; /* Adjust height as needed (50% of viewport height here) */
-  margin-bottom: 20px; /* Optional: Adds space between map and other content */
-}
-
-/* Optional: Make sure the map element inside this container fills the container */
 .leaflet-container {
-  width: 100%;
-  height: 70vh;
+  width: 80vh;
+  height: 77.5vh;
 }
 
 

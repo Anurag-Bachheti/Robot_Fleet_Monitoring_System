@@ -1,6 +1,5 @@
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import '../app.css';
 import { Icon } from 'leaflet';
 
 const activeIcon = new Icon({
@@ -12,35 +11,13 @@ const inActiveIcon = new Icon({
     iconUrl: "./src/assets/inactive.svg",
     iconSize: [15, 15]
 });
-
-const batteryAlertIcon = new Icon({
-    iconUrl: "./src/assets/batteryAlert.svg",
-    iconSize: [15, 15]
-});
-
-const MapScreen = ({ data }) => {
+const MapScreen = ({ data, onIconClick }) => {
     return (
-        <MapContainer center={[12.931758, -7.110705]} zoom={1.5}>
+        <MapContainer center={[12.931758, -7.110705]} zoom={1}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
-
-            {data && data.map((obj) => {
-                const markerIcon = obj.battery <= 20
-                    ? batteryAlertIcon
-                    : (obj.status ? activeIcon : inActiveIcon);
-                return (
-                    <Marker
-                        key={obj.id}
-                        position={[obj.location.latitude, obj.location.longitude]}
-                        icon={markerIcon}
-                    />
-                );
-            }
-            )
-            }
-
             {
                 data && data.map(obj => (
                     obj.status == true ? (
@@ -51,6 +28,9 @@ const MapScreen = ({ data }) => {
                                 obj.location.longitude
                             ]}
                             icon={activeIcon}
+                            eventHandlers={{
+                                click: () => onIconClick(obj),
+                            }}
                         />
                     ) : (
                         <Marker
@@ -59,14 +39,17 @@ const MapScreen = ({ data }) => {
                                 obj.location.latitude,
                                 obj.location.longitude
                             ]}
-                            icon={inActiveIcon}
+                            icon={obj.status ? activeIcon : inActiveIcon}
+                            eventHandlers={{
+                                click: () => onIconClick(obj),
+                            }}
                         />
                     )
                 ))
             }
         </MapContainer>
-
     );
 };
+
 
 export default MapScreen;

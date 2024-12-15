@@ -1,63 +1,85 @@
+import React from 'react';
 import RobotComp from './RobotComp';
 
-const RobotTable = ({robotArr}) => {
-    return (
-        <>
+const RobotTable = ({ robotArr, onRowHover, selectedRobot }) => {
+  return (
+    <>
+      <div style={styles.tableContainer}>
+        <div style={styles.tableHeader}>
+          <div style={styles.tableCell}>ID</div>
+          <div style={styles.tableCell}>Status</div>
+          <div style={styles.tableCell}>Battery</div>
+          <div style={styles.tableCell}>CPU Usage</div>
+          <div style={styles.tableCell}>RAM Consumption</div>
+          <div style={styles.tableCell}>Last Updated</div>
+          <div style={styles.tableCell}>Location</div>
+        </div>
 
-            <div style={styles.tableContainer}>
-                <div style={styles.tableHeader}>
-                    <div style={styles.tableCell}>ID</div>
-                    <div style={styles.tableCell}>Status</div>
-                    <div style={styles.tableCell}>Battery</div>
-                    <div style={styles.tableCell}>CPU Usage</div>
-                    <div style={styles.tableCell}>RAM Consumption</div>
-                    <div style={styles.tableCell}>Last Updated</div>
-                    <div style={styles.tableCell}>Location</div>
-                </div>
 
-                <div style={styles.tableBody}>
-                    <RobotComp robots={robotArr} />
-                </div>
+          <div style={styles.tableBody}>
+            <RobotComp robots={robotArr} onRowHover={onRowHover}/>
+          </div>
+
+         <div style={styles.robotDetails}>
+                {selectedRobot ? (
+                    <div>
+                        <h3>Robot Details</h3>
+                        <p><strong>ID:</strong> {selectedRobot.id}</p>
+                        <p><strong>Status:</strong> {selectedRobot.status ? 'Active' : 'Inactive'}</p>
+                        <p><strong>Battery:</strong> {selectedRobot.battery}%</p>
+                        <p><strong>CPU Usage:</strong> {selectedRobot.cpuUsage}%</p>
+                        <p><strong>RAM Consumption:</strong> {selectedRobot.ramConsumption} MB</p>
+                        <p><strong>Last Updated:</strong> {selectedRobot.lastUpdated}</p>
+                        <p><strong>Location:</strong> Latitude {selectedRobot.location.latitude}, Longitude {selectedRobot.location.longitude}</p>
+                    </div>
+                ) : (
+                    <p>Select a robot from the map to view details</p>
+                )}
             </div>
 
-        </>
-    )
+      </div>
+    </>
+  )
 }
 
-
 const styles = {
-    tableContainer: {
-      width: '100%',
-      maxHeight: '80vh',  // Ensures the table occupies a significant portion of the viewport
-      border: '1px solid #ddd',
-      overflowY: 'auto',  // Enables vertical scrolling for the table body
-    },
-    tableHeader: {
-      color: 'black',
-      display: 'flex',
-      position: 'sticky',
-      top: 0, // Keeps the header at the top of the table
-      backgroundColor: '#f4f4f4',
-      fontWeight: 'bold',
-      zIndex: 1, // Ensure the header stays above the body
-    },
-    tableCell: {
-      flex: '1',
-      padding: '10px',
-      textAlign: 'center',
-      borderBottom: '1px solid #ddd',
-    },
-    tableBody: {
-      backgroundColor: 'white',
-      color: 'black',
-      display: 'block',
-      maxHeight: '70vh',  // Adjust height to show at least 7 rows
-      overflowY: 'auto', // Enables scrolling in body
-    },
-    tableRow: {
-      display: 'flex',
-      borderBottom: '1px solid #ddd',
-    },
-  };
+  
+  tableContainer: {
+    width: '100%',
+    height: '100%',
+    border: '1px solid #ddd',
+    overflowY: 'auto',
+  },
+  tableHeader: {
+    color: 'black',
+    display: 'flex',
+    position: 'sticky',
+    top: 0,
+    backgroundColor: '#f4f4f4',
+    fontWeight: 'bold',
+    zIndex: 1,
+  },
+  tableCell: {
+    // font: "Fira Sans",
+    flex: '1',
+    padding: '10px',
+    textAlign: 'center',
+    borderBottom: '1px solid #ddd',
+  },
+  tableBody: {
+    flex: "1",
+    maxwidth: '50%',
+    border: '1px solid #ddd',
+    backgroundColor: '#112d37',
+    color: 'white',
+    display: 'block',
+    maxHeight: '70vh',
+    overflowY: 'auto',
+  },
+  tableRow: {
+    display: 'flex',
+    borderBottom: '1px solid #ddd',
+  },
+};
 
 export default RobotTable;
