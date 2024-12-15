@@ -4,6 +4,7 @@ import RobotTable from './screen/robotTable';
 import "./app.css";
 
 function App() {
+  const [selectedRobot, setSelectedRobot] = useState(null);
   const [filter, setFilter] = useState('All');
   const [robots, setRobots] = useState([]);
   const [error, setError] = useState(null);
@@ -59,30 +60,35 @@ function App() {
       setError(e.message);
     }
   }
+  const handleIconClick = (robot) => {
+    setSelectedRobot(robot);
+  };
 
   return (
     <>
       <div style={styles.container}>
-        <h1>Robot Monitoring Dashboard</h1>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h1 style={{ marginRight: '16px' }}>Robot Monitoring Dashboard</h1>
 
-        <select
-          style={styles.dropdown}
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="All">All</option>
-          <option value="Online">Online</option>
-          <option value="Offline">Offline</option>
-          <option value="BatteryLow">Low Battery</option>
-        </select>
+          <select
+            style={styles.dropdown}
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="All">All</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+            <option value="BatteryLow">Low Battery</option>
+          </select>
 
-        {error && <div style={styles.errorMessage}>Error: {error}</div>}
+          {error && <div style={styles.errorMessage}>Error: {error}</div>}
+        </div>
       </div>
 
       <div className='dashboard' style={styles.dashboard}>
-        <RobotTable robotArr={filteredRobots} />
+        <RobotTable robotArr={filteredRobots} selectedRobot={selectedRobot} />
         <div className="map-container" style={styles.mapContainer}>
-          <MapScreen data={filteredRobots} />
+          <MapScreen data={filteredRobots} onIconClick={handleIconClick} />
 
         </div>
       </div>
@@ -118,9 +124,12 @@ const styles = {
     marginBottom: '20px',
   },
   dropdown: {
+    lineHeight: 'normal',
+    padding: '6px 12px',
     marginBottom: '20px',
-    padding: '10px',
     fontSize: '16px',
+    fontSize: 'inherit',
+    marginBottom: '0'
   },
 };
 export default App;

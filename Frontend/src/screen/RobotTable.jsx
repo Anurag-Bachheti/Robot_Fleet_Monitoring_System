@@ -1,9 +1,9 @@
+import React from 'react';
 import RobotComp from './RobotComp';
 
-const RobotTable = ({ robotArr }) => {
+const RobotTable = ({ robotArr, onRowHover, selectedRobot }) => {
   return (
     <>
-
       <div style={styles.tableContainer}>
         <div style={styles.tableHeader}>
           <div style={styles.tableCell}>ID</div>
@@ -17,8 +17,25 @@ const RobotTable = ({ robotArr }) => {
 
 
           <div style={styles.tableBody}>
-            <RobotComp robots={robotArr} />
+            <RobotComp robots={robotArr} onRowHover={onRowHover}/>
           </div>
+
+         <div style={styles.robotDetails}>
+                {selectedRobot ? (
+                    <div>
+                        <h3>Robot Details</h3>
+                        <p><strong>ID:</strong> {selectedRobot.id}</p>
+                        <p><strong>Status:</strong> {selectedRobot.status ? 'Active' : 'Inactive'}</p>
+                        <p><strong>Battery:</strong> {selectedRobot.battery}%</p>
+                        <p><strong>CPU Usage:</strong> {selectedRobot.cpuUsage}%</p>
+                        <p><strong>RAM Consumption:</strong> {selectedRobot.ramConsumption} MB</p>
+                        <p><strong>Last Updated:</strong> {selectedRobot.lastUpdated}</p>
+                        <p><strong>Location:</strong> Latitude {selectedRobot.location.latitude}, Longitude {selectedRobot.location.longitude}</p>
+                    </div>
+                ) : (
+                    <p>Select a robot from the map to view details</p>
+                )}
+            </div>
 
       </div>
     </>
